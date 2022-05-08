@@ -63,7 +63,6 @@ namespace RedArborToni.Controllers
                 _logger.LogError($"Exception : {ex.Message}");
                 return GetErrorResult(ex);
             }
-
         }
 
 
@@ -118,6 +117,8 @@ namespace RedArborToni.Controllers
         [Route("Delete/{employeeID}")]
         [HttpDelete]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ObjectResult))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult Delete(int employeeID)
         {
             try
