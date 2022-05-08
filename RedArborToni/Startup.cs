@@ -4,7 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using RedArborToni.DataAccess;
+using RedArborToni.Services;
+using System.Data.Common;
 
 namespace RedArborToni
 {
@@ -21,12 +22,14 @@ namespace RedArborToni
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddScoped<EmployeeRepo>();
+            services.AddScoped<EmployeeService>();
 
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "RedArborToni", Version = "v1" });
             });
+
+            DbProviderFactories.RegisterFactory("System.Data.SqlClient", System.Data.SqlClient.SqlClientFactory.Instance);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

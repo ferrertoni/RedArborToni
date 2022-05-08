@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using RedArborToni.DataAccess;
 using RedArborToni.Models;
+using RedArborToni.Services;
 using System;
-using System.Linq;
 
 namespace RedArborToni.Controllers
 {
@@ -13,12 +12,12 @@ namespace RedArborToni.Controllers
     public class EmployeeController : ControllerBase
     {
         private readonly ILogger<EmployeeController> _logger;
-        private EmployeeRepo _employeeRepo;
+        private EmployeeService _employeeService;        
 
-        public EmployeeController(ILogger<EmployeeController> logger, EmployeeRepo employeeRepo)
+        public EmployeeController(ILogger<EmployeeController> logger, EmployeeService employeeService)
         {
             _logger = logger;
-            _employeeRepo = employeeRepo;
+            _employeeService = employeeService;
         }
 
         /// <summary>
@@ -33,7 +32,7 @@ namespace RedArborToni.Controllers
         {
             try
             {
-                var employees = _employeeRepo.GetEmployees().ToArray();
+                var employees = _employeeService.Get();
                 return Ok(employees);
             }
             catch (Exception ex)
@@ -55,7 +54,7 @@ namespace RedArborToni.Controllers
         {
             try
             {
-                var employee = _employeeRepo.GetEmployeeByID(employeeID);
+                var employee = _employeeService.GetByID(employeeID);
                 return Ok(employee);
             }
             catch (Exception ex)
@@ -78,8 +77,7 @@ namespace RedArborToni.Controllers
         {
             try
             {
-                var employeeResult = _employeeRepo.CreateEmployee(employee);
-
+                var employeeResult = _employeeService.Create(employee);
                 return Ok(employeeResult);
             }
             catch (Exception ex)
@@ -101,7 +99,7 @@ namespace RedArborToni.Controllers
         {
             try
             {
-                _employeeRepo.UpdateEmployee(employeeID, employee);
+                _employeeService.Update(employeeID, employee);
                 return Ok();
             }
             catch (Exception ex)
@@ -123,7 +121,7 @@ namespace RedArborToni.Controllers
         {
             try
             {
-                _employeeRepo.DeleteEmployee(employeeID);
+                _employeeService.Delete(employeeID);
                 return Ok();
             }
             catch (Exception ex)
